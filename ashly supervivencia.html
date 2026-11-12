@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survival Zone | Juegos de supervivencia</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background:#101510;
+  color:white;
+  font-family:Arial,sans-serif;
+}
+
+header {
+  height:75px;
+  padding:0 8%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#151e17;
+  border-bottom:1px solid #29362b;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.logo { color:#9bea72; font-size:24px; font-weight:bold; }
+nav a { color:white; text-decoration:none; margin-left:25px; }
+nav a:hover { color:#9bea72; }
+
+.hero {
+  min-height:480px;
+  padding:100px 8%;
+  display:flex;
+  align-items:center;
+  background:linear-gradient(90deg,#101510 10%,transparent),
+  linear-gradient(0deg,#101510,transparent),
+  url('https://images.unsplash.com/photo-1511497584788-876760111969?w=1600')
+  center/cover;
+}
+
+.hero-content { max-width:600px; }
+.hero h1 { font-size:55px; margin-bottom:20px; }
+.hero h1 span { color:#9bea72; }
+.hero p { color:#c2c9c1; line-height:1.7; margin-bottom:25px; }
+
+.btn {
+  display:inline-block;
+  padding:14px 25px;
+  background:#9bea72;
+  color:#142014;
+  text-decoration:none;
+  font-weight:bold;
+  border-radius:5px;
+  cursor:pointer;
+  border:none;
+}
+
+section { padding:55px 8%; }
+
+.section-title {
+  font-size:28px;
+  margin-bottom:25px;
+}
+
+.filters {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.filters button {
+  padding:10px 18px;
+  border:1px solid #425141;
+  background:#1c261d;
+  color:white;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+.filters button.active,
+.filters button:hover {
+  background:#9bea72;
+  color:#142014;
+}
+
+.search {
+  width:100%;
+  padding:15px;
+  margin-bottom:25px;
+  background:#1c261d;
+  border:1px solid #425141;
+  border-radius:7px;
+  color:white;
+  font-size:16px;
+}
+
+.games {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:25px;
+}
+
+.card {
+  background:#1a231b;
+  border:1px solid #29382b;
+  border-radius:10px;
+  overflow:hidden;
+  transition:.3s;
+}
+
+.card:hover {
+  transform:translateY(-7px);
+  border-color:#9bea72;
+}
+
+.card img {
+  width:100%;
+  height:175px;
+  object-fit:cover;
+}
+
+.card-content { padding:18px; }
+.card h3 { margin-bottom:10px; }
+.card p { color:#aab5aa; font-size:14px; line-height:1.5; }
+.tag { color:#9bea72; font-size:12px; margin:12px 0; }
+.card .btn { width:100%; text-align:center; }
+
+footer {
+  background:#151e17;
+  padding:30px;
+  text-align:center;
+  color:#aab5aa;
+}
+
+@media(max-width:600px) {
+  header { padding:0 5%; }
+  nav a { margin-left:8px; font-size:12px; }
+  .hero { padding:75px 6%; }
+  .hero h1 { font-size:38px; }
+  section { padding:40px 6%; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">☠ SURVIVAL ZONE</div>
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#juegos">Juegos</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+
+<div class="hero" id="inicio">
+  <div class="hero-content">
+    <h1>SOBREVIVE.<br><span>EXPLORA.</span><br>LUCHA.</h1>
+    <p>
+      Descubre los mejores videojuegos de supervivencia.
+      Enfréntate a peligros, explora mundos desconocidos
+      y demuestra que puedes sobrevivir.
+    </p>
+    <a href="#juegos" class="btn">EXPLORAR JUEGOS</a>
+  </div>
+</div>
+
+<section id="juegos">
+  <h2 class="section-title">🎮 Catálogo de supervivencia</h2>
+
+  <input class="search" id="search"
+    placeholder="Buscar un juego..." oninput="filterGames()">
+
+  <div class="filters">
+    <button class="active" onclick="setFilter('Todos',this)">Todos</button>
+    <button onclick="setFilter('Terror',this)">Terror</button>
+    <button onclick="setFilter('Zombies',this)">Zombies</button>
+    <button onclick="setFilter('Mundo abierto',this)">Mundo abierto</button>
+    <button onclick="setFilter('Aventura',this)">Aventura</button>
+  </div>
+
+  <div class="games" id="games"></div>
+</section>
+
+<footer id="contacto">
+  <p>☠ SURVIVAL ZONE © 2026</p>
+  <p>El lugar donde comienza tu supervivencia.</p>
+</footer>
+
+<script>
+const games = [
+  {
+    name:"The Forest",
+    category:"Terror",
+    description:"Sobrevive en un bosque lleno de criaturas peligrosas.",
+    image:"https://images.unsplash.com/photo-1448375240586-882707db888b?w=700"
+  },
+  {
+    name:"Rust",
+    category:"Mundo abierto",
+    description:"Recolecta recursos, construye refugios y sobrevive.",
+    image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=700"
+  },
+  {
+    name:"Minecraft",
+    category:"Aventura",
+    description:"Construye, explora y sobrevive en un mundo infinito.",
+    image:"https://images.unsplash.com/photo-1607513746994-51f730a44832?w=700"
+  },
+  {
+    name:"Subnautica",
+    category:"Aventura",
+    description:"Explora las profundidades de un planeta alienígena.",
+    image:"https://images.unsplash.com/photo-1530053969600-caed2596d242?w=700"
+  },
+  {
+    name:"7 Days to Die",
+    category:"Zombies",
+    description:"Defiéndete de hordas de zombis y crea tu fortaleza.",
+    image:"https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=700"
+  },
+  {
+    name:"Green Hell",
+    category:"Mundo abierto",
+    description:"Sobrevive en una peligrosa selva amazónica.",
+    image:"https://images.unsplash.com/photo-1511497584788-876760111969?w=700"
+  }
+];
+
+let currentFilter="Todos";
+
+function renderGames(list) {
+  const container=document.getElementById("games");
+
+  container.innerHTML=list.length ? list.map(game=>`
+    <article class="card">
+      <img src="${game.image}" alt="${game.name}">
+      <div class="card-content">
+        <h3>${game.name}</h3>
+        <p>${game.description}</p>
+        <div class="tag">${game.category}</div>
+        <button class="btn" onclick="showGame('${game.name}')">
+          VER JUEGO
+        </button>
+      </div>
+    </article>
+  `).join("") : "<p>No se encontraron juegos.</p>";
+}
+
+function setFilter(category,button) {
+  currentFilter=category;
+  document.querySelectorAll(".filters button")
+    .forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+  filterGames();
+}
+
+function filterGames() {
+  const search=document.getElementById("search").value.toLowerCase();
+  const filtered=games.filter(game=>
+    (currentFilter==="Todos" || game.category===currentFilter) &&
+    (game.name.toLowerCase().includes(search) ||
+     game.description.toLowerCase().includes(search))
+  );
+  renderGames(filtered);
+}
+
+function showGame(name) {
+  const game=games.find(g=>g.name===name);
+  alert(game.name + "\n\n" + game.description);
+}
+
+renderGames(games);
+</script>
+
+</body>
+</html>
